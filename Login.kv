@@ -1,0 +1,130 @@
+<LoginInterface>:
+    name: 'loginpage'
+    MDBottomNavigation:
+        MDBottomNavigationItem:
+            name: "screen1"
+            text: "Sign Up"
+            icon: "account"
+
+            MDBoxLayout:
+                padding: "10dp"
+                orientation: "vertical"
+                size_hint: .8, .2
+                pos_hint: {"center_x": .5, "top": .5}
+                MDTextField:
+                    id: signup_email
+                    hint_text: "Email"
+                MDTextField:
+                    id: signup_username
+                    hint_text: "Username"
+                MDTextField:
+                    id: signup_password
+                    hint_text: "Password"
+                    password: True
+                    password_mask: "*"
+                MDTextField:
+                    id: signup_cname
+                    hint_text: "Company Name"
+                MDTextField:
+                    id: signup_ccode
+                    hint_text: "Company Code"
+            MDBoxLayout:
+                padding: "10dp"
+                size_hint_x: .2
+                size_hint_y: None
+                height: "40dp"
+                pos_hint: {"right": .9, "top": .3}
+                MDRaisedButton:
+                    text: "Sign Up"
+                    on_release: root.creator()
+        MDBottomNavigationItem:
+            name: "screen2"
+            text: "Login"
+            icon: "login"
+            MDBoxLayout:
+                padding: "10dp"
+                orientation: "vertical"
+                size_hint: .8, .2
+                pos_hint: {"center_x": .5, "top": .7}
+                MDTextField:
+                    id: login_username
+                    required: True
+                    hint_text: "Username"
+                MDTextField:
+                    id: login_password
+                    password:True
+                    password_mask: "*"
+                    hint_text: "Password"
+                    required: True
+
+            MDBoxLayout:
+                padding: "10dp"
+                size_hint_x: .2
+                size_hint_y: None
+                height: "40dp"
+                pos_hint: {"right": .9, "top": .3}
+                MDRaisedButton:
+                    text: "Log in"
+                    on_release: root.login()
+
+<MainScreen>:
+
+    BoxLayout:
+        id: profile_layout
+        orientation: 'vertical'
+        padding: '10dp'
+        spacing: '10dp'
+        MDLabel:
+            text: 'Profile'
+            font_size: '30sp'
+            halign: 'center'
+            valign: 'center'
+        MDRaisedButton:
+            text: 'Logout'
+            pos_hint: {'center_x': 0.5}
+            on_release: app.root.current = 'loginpage'
+
+    MDBottomNavigation:
+        MDBottomNavigationItem:
+            name: "map"
+            text: "Map"
+            icon: "map-marker-radius"
+
+
+        MDBottomNavigationItem:
+            name: "urgent"
+            text: "Urgent"
+            icon: "alert-circle"
+
+            MDLabel:
+                text: "Urgent Screen"
+
+        MDBottomNavigationItem:
+            name: "edit"
+            text: "Edit"
+            icon: "pencil-box-multiple-outline"
+
+            MDLabel:
+                text: "Edit Screen"
+
+        MDBottomNavigationItem:
+            name: "profile"
+            text: "Profile"
+            icon: "account"
+
+            BoxLayout:
+                id: profile_layout
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: '10dp'
+                MDLabel:
+                    text: 'Profile'
+                    font_size: '30sp'
+                    halign: 'center'
+                    valign: 'center'
+                MDLabel:
+                    id: profile_info
+                    text: f"Username: {app.username}\nPassword: {app.password}"
+                    font_size: '20sp'
+                    halign: 'center'
+                    valign: 'center'
