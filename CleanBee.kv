@@ -62,20 +62,20 @@
                 size_hint_x: .2
                 size_hint_y: None
                 height: "40dp"
-                pos_hint: {"right": .9, "top": .3}
+                pos_hint: {"right": .9, "top": .275}
                 MDRaisedButton:
                     text: "Log in"
                     on_release: root.login()
-            
             MDBoxLayout:
                 padding: "10dp"
                 size_hint_x: .2
                 size_hint_y: None
                 height: "40dp"
-                pos_hint: {"left": .7, "top": .3}
+                padding:90,0
+                pos_hint: {"left": .9, "top": .3}
                 MDRaisedButton:
                     text: "Forgot Password?"
-                    on_release: 
+                    on_release:
                         root.forgot_password()
 
 <MainScreen>:
@@ -98,13 +98,6 @@
             name: "Edit"
             text: "Edit"
             icon: "clipboard-list"
-
-            MDFloatingActionButton:
-                id: button
-                icon: "plus"
-                pos: 20, 20
-                disabled: False
-                on_release: root.showpopup()
 
         MDBottomNavigationItem:
             id: profile_tab
@@ -140,8 +133,7 @@
         MDRaisedButton:
             id: btn_reset
             text: "RESET"
-            on_release: 
+            on_release:
                 root.reset_password()
                 root.manager.current='loginpage'
-
 
