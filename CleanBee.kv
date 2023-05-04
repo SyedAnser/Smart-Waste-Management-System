@@ -69,62 +69,34 @@
 
 <MainScreen>:
 
-    BoxLayout:
-        id: profile_layout
-        orientation: 'vertical'
-        padding: '10dp'
-        spacing: '10dp'
-        MDLabel:
-            text: 'Profile'
-            font_size: '30sp'
-            halign: 'center'
-            valign: 'center'
-        MDRaisedButton:
-            text: 'Logout'
-            pos_hint: {'center_x': 0.5}
-            on_release: app.root.current = 'loginpage'
-
     MDBottomNavigation:
         MDBottomNavigationItem:
-            name: "map"
-            text: "Map"
-            icon: "map-marker-radius"
-
-
-        MDBottomNavigationItem:
-            name: "urgent"
+            id: urgent_tab
+            name: "Urgent"
             text: "Urgent"
             icon: "alert-circle"
 
-            MDLabel:
-                text: "Urgent Screen"
+        MDBottomNavigationItem:
+            id: overview_tab
+            name: "Overview"
+            text: "Overview"
+            icon: "view-dashboard"
 
         MDBottomNavigationItem:
-            name: "edit"
+            id: edit_tab
+            name: "Edit"
             text: "Edit"
-            icon: "pencil-box-multiple-outline"
+            icon: "clipboard-list"
 
-            MDLabel:
-                text: "Edit Screen"
+            MDFloatingActionButton:
+                id: button
+                icon: "plus"
+                pos: 20, 20
+                disabled: False
+                on_release: root.showpopup()
 
         MDBottomNavigationItem:
+            id: profile_tab
             name: "profile"
             text: "Profile"
             icon: "account"
-
-            BoxLayout:
-                id: profile_layout
-                orientation: 'vertical'
-                padding: '10dp'
-                spacing: '10dp'
-                MDLabel:
-                    text: 'Profile'
-                    font_size: '30sp'
-                    halign: 'center'
-                    valign: 'center'
-                MDLabel:
-                    id: profile_info
-                    text: f"Username: {app.username}\nPassword: {app.password}"
-                    font_size: '20sp'
-                    halign: 'center'
-                    valign: 'center'
