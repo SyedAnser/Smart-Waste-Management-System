@@ -368,17 +368,24 @@ class MainScreen(Screen):
         mycursor.execute(query)
         result = mycursor.fetchall()
 
-        # Create a layout for each dustbin
-        for dustbin_code, status in result:
-            layout = BoxLayout(orientation='horizontal')
-            label = MDLabel(text=f"Dustbin {dustbin_code}: {status}")
-            button = MDFlatButton(text="Empty dustbin", md_bg_color=[0, 0.8, 0.2, 1])
-            button.bind(on_press=lambda event: self.convert_to_zero(dustbin_code))
-            layout.add_widget(label)
-            layout.add_widget(button)
+        if not result:
+            # If the result is empty, add a label to the middle of the screen
+            self.urgent_layout = BoxLayout(orientation='vertical', padding=50)
+            label = MDLabel(text='No urgent matters to attend to', halign='center')
+            self.urgent_layout.add_widget(label)
+        else:
+            # Otherwise, create a layout for each dustbin
+            self.urgent_layout = BoxLayout(orientation='vertical')
+            for dustbin_code, status in result:
+                layout = BoxLayout(orientation='horizontal')
+                label = MDLabel(text=f"Dustbin {dustbin_code}: {status}")
+                button = MDFlatButton(text="Empty dustbin", md_bg_color=[0, 0.8, 0.2, 1])
+                button.bind(on_press=lambda event: self.convert_to_zero(dustbin_code))
+                layout.add_widget(label)
+                layout.add_widget(button)
 
-            # Add the layout to the tab
-            self.urgent_layout.add_widget(layout)
+                # Add the layout to the tab
+                self.urgent_layout.add_widget(layout)
 
         self.ids.urgent_tab.add_widget(self.urgent_layout)
 
