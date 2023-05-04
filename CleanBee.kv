@@ -66,6 +66,17 @@
                 MDRaisedButton:
                     text: "Log in"
                     on_release: root.login()
+            
+            MDBoxLayout:
+                padding: "10dp"
+                size_hint_x: .2
+                size_hint_y: None
+                height: "40dp"
+                pos_hint: {"left": .7, "top": .3}
+                MDRaisedButton:
+                    text: "Forgot Password?"
+                    on_release: 
+                        root.forgot_password()
 
 <MainScreen>:
 
@@ -100,3 +111,37 @@
             name: "profile"
             text: "Profile"
             icon: "account"
+
+<ResetPasswordPage>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: '10dp'
+        size_hint: .8, .2
+        pos_hint: {"center_x": .5, "top": .7}
+        MDTextField:
+            id: txt_username
+            hint_text: "Username"
+        MDTextField:
+            id: txt_password
+            hint_text: "Password"
+            password: True
+            password_mask: '*'
+        MDTextField:
+            id: txt_confirm_password
+            hint_text: "Confirm Password"
+            password: True
+            password_mask: '*'
+    MDBoxLayout:
+        padding: "10dp"
+        size_hint_x: .2
+        size_hint_y: None
+        height: "40dp"
+        pos_hint: {"right": .9, "top": .3}
+        MDRaisedButton:
+            id: btn_reset
+            text: "RESET"
+            on_release: 
+                root.reset_password()
+                root.manager.current='loginpage'
+
+
