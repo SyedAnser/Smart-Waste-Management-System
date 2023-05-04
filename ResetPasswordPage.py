@@ -6,7 +6,11 @@ from kivy.uix.button import Button
 from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextField
 from kivymd.app import MDApp
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton, MDRaisedButton
 import mysql.connector
+
+Window.size = (480, 600)
 
 
 class ResetPasswordPage(Screen):
@@ -30,26 +34,31 @@ class ResetPasswordPage(Screen):
         user = cursor.fetchone()
         
         if user is None:
-            self.ids.lbl_error.text = "Username not found"
+            cancelbtn = MDFlatButton(text='Retry', on_release=self.close_dialogue)
+            self.dialog = MDDialog(title="User Not Found", text="The given username is not registered with us",
+                                   size_hint=(0.7, 0.2), buttons=[cancelbtn])
+            self.dialog.open()
             cnx.close()
         elif password != confirm_password:
-            self.ids.lbl_error.text = "Passwords do not match"
+            cancelbtn = MDFlatButton(text='Retry', on_release=self.close_dialogue)
+            self.dialog = MDDialog(title="Passwords do not match", text="Please make sure you type the same password",
+                                   size_hint=(0.7, 0.2), buttons=[cancelbtn])
+            self.dialog.open()
         else:
             # Update the password in the database
             query = ("UPDATE users SET password = %s WHERE username = %s")
             data = (password, username)
             cursor.execute(query, data)
             cnx.commit()
-            self.ids.lbl_error.text = "Password updated"
+            cancelbtn = MDFlatButton(text='OK', on_release=self.close_dialogue)
+            self.dialog = MDDialog(title="Password Updated", text="Password has been updated successfully!",
+                                   size_hint=(0.7, 0.2), buttons=[cancelbtn])
+            self.dialog.open()
             cnx.close()
-        
-    def show_password(self, value):
-        if value:
-            self.ids.txt_password.password = False
-            self.ids.txt_confirm_password.password = False
-        else:
-            self.ids.txt_password.password = True
-            self.ids.txt_confirm_password.password = True
+    
+    def close_dialogue(self, obj):
+        self.dialog.dismiss()
+
 
 class ResetPasswordPageApp(MDApp):
     def build(self):
