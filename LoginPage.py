@@ -23,7 +23,7 @@ import mysql.connector as mysql
 mydb = mysql.connect(
   host="localhost",
   user="root",
-  password="password",
+  password="SA9310189666!",
   database="CleanBee"
 )
 mycursor = mydb.cursor()
@@ -37,10 +37,14 @@ class WindowManager(ScreenManager):
 Window.size = (590, 600)
 
 class LoginInterface(Screen):
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = MDApp.get_running_app()
 
+    def forgot_password(self):
+        self.manager.current = 'reset_password'
+    
     def login(self):
 
         username = self.ids.login_username.text
@@ -130,6 +134,53 @@ class LoginInterface(Screen):
         self.app.ccode = ccode
         self.app.password = password
         self.manager.current = 'mainscreen'
+
+class ResetPasswordPage(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.app = MDApp.get_running_app()
+    
+    def reset_password(self):
+        # Get the values entered by the user
+        username = self.ids.txt_username.text
+        password = self.ids.txt_password.text
+        confirm_password = self.ids.txt_confirm_password.text
+        
+        # Check if the username exists in the database
+        cnx = mysql.connect(user='root', password='SA9310189666!',
+                                      host='localhost',
+                                      database='CleanBee')
+        cursor = cnx.cursor()
+        query = ("SELECT * FROM user WHERE username = %s")
+        cursor.execute(query, (username,))
+        user = cursor.fetchone()
+        
+        if user is None:
+            cancelbtn = MDFlatButton(text='Retry', on_release=self.close_dialogue)
+            self.dialog = MDDialog(title="User Not Found", text="The given username is not registered with us",
+                                   size_hint=(0.7, 0.2), buttons=[cancelbtn])
+            self.dialog.open()
+            cnx.close()
+        elif password != confirm_password:
+            cancelbtn = MDFlatButton(text='Retry', on_release=self.close_dialogue)
+            self.dialog = MDDialog(title="Passwords do not match", text="Please make sure you type the same password",
+                                   size_hint=(0.7, 0.2), buttons=[cancelbtn])
+            self.dialog.open()
+        else:
+            # Update the password in the database
+            query = ("UPDATE user SET password = %s WHERE username = %s")
+            data = (password, username)
+            cursor.execute(query, data)
+            cnx.commit()
+            cancelbtn = MDFlatButton(text='OK', on_release=self.close_dialogue)
+            self.dialog = MDDialog(title="Password Updated", text="Password has been updated successfully!",
+                                   size_hint=(0.7, 0.2), buttons=[cancelbtn])
+            self.dialog.open()
+            self.manager.current='loginpage'
+            cnx.close()
+    
+    def close_dialogue(self, obj):
+        self.dialog.dismiss()
 
 class MainScreen(Screen):
     def __init__(self, **kwargs):
@@ -341,6 +392,7 @@ class CleanBeeApp(MDApp):
         sm.add_widget(LoginInterface(name='loginpage'))
         sm.add_widget(MainScreen(name='mainscreen'))
         sm.add_widget(ProfileScreen(name='profilescreen'))
+        sm.add_widget(ResetPasswordPage(name='reset_password'))
 
         return sm
 
