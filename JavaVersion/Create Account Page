@@ -1,0 +1,143 @@
+import java.awt.EventQueue;
+import java.sql.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.Arrays;
+
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+
+public class CreateAccount extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textField;
+	private JPasswordField passwordField;
+	private JPasswordField passwordField_1;
+	JLabel UserLabel = new JLabel("Enter Username:");
+	JLabel PasswordLabel = new JLabel("Enter Password:");
+	JLabel ConfirmPasswordlabel = new JLabel("Confirm Password:");
+	JButton CreateAccbutton = new JButton("Create Account");
+	JCheckBox showPassword = new JCheckBox("Show Password");
+	JLabel lblNewLabel = new JLabel("");
+	
+
+	public void setLayout() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 447, 500);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(0, 0, 160));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+	}
+	
+	public void DeclareAndAdd(){
+		
+		UserLabel.setForeground(new Color(255, 255, 255));
+		UserLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		UserLabel.setBounds(22, 67, 126, 13);
+		contentPane.add(UserLabel);
+		
+		PasswordLabel.setForeground(Color.WHITE);
+		PasswordLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		PasswordLabel.setBounds(22, 120, 126, 13);
+		contentPane.add(PasswordLabel);
+		
+		ConfirmPasswordlabel.setForeground(Color.WHITE);
+		ConfirmPasswordlabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		ConfirmPasswordlabel.setBounds(22, 176, 126, 13);
+		contentPane.add(ConfirmPasswordlabel);
+		
+		textField=new JTextField();
+		textField.setBounds(158, 66, 205, 19);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(158, 119, 205, 19);
+		contentPane.add(passwordField);
+		
+		passwordField_1 = new JPasswordField();
+		passwordField_1.setBounds(158, 175, 205, 19);
+		contentPane.add(passwordField_1);
+		
+		CreateAccbutton.setFont(new Font("Tahoma", Font.BOLD, 16));
+		CreateAccbutton.setBounds(117, 305, 161, 49);
+		contentPane.add(CreateAccbutton);
+		
+		showPassword.setFont(new Font("Tahoma", Font.BOLD, 12));
+		showPassword.setForeground(new Color(255, 255, 255));
+		showPassword.setBackground(new Color(0, 0, 160));
+		showPassword.setBounds(158, 219, 141, 21);
+		contentPane.add(showPassword);
+		
+		lblNewLabel.setForeground(new Color(255, 0, 0));
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel.setBounds(64, 403, 299, 13);
+		contentPane.add(lblNewLabel);
+		
+	}
+	
+	public void addActions() {
+
+		showPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (showPassword.isSelected()) {
+					passwordField.setEchoChar((char) 0);
+				} else {
+					passwordField.setEchoChar('*');
+				}
+			}
+		});
+		
+		CreateAccbutton.addActionListener(new ActionListener() {
+			String p1=Arrays.toString(passwordField.getPassword());
+			String p2=Arrays.toString(passwordField_1.getPassword());
+			public void actionPerformed(ActionEvent e) {
+				if (p1==p2) {
+					
+					String username=textField.getText();
+					String password=passwordField.getText();
+					try {
+						Class.forName("com.mysql.cj.jdbc.Driver");
+						Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/LoginPage", "root","Cyberics@7");
+						Statement stm=con.createStatement();
+						String query="Insert into Loginid values('"+username+"','"+password+"')";
+						stm.executeUpdate(query);
+						lblNewLabel.setText("Account Created");
+						
+						
+				}
+					catch (Exception e1) {
+					e1.printStackTrace();
+
+				}}
+				else {
+					lblNewLabel.setText("Passwords do not match");
+				}
+			}
+		});
+	}
+	public CreateAccount() {
+		setLayout();
+		DeclareAndAdd();
+		addActions();	
+		
+	}
+	public static void main(String[] args) {
+		CreateAccount ca=new CreateAccount();
+		ca.setVisible(true);
+	}
+}
